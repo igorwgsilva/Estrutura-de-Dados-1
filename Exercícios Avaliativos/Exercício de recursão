@@ -1,0 +1,50 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int recCont(unsigned char *palavra, int y){
+
+    unsigned char v = toupper(palavra[y]);
+    
+    switch (v) {
+      /*Caso Base*/
+      case '\0': 
+        return 0;
+
+      /*Função definida em si mesma*/
+        case 'A': case 'E': case 'I': case 'O': case 'S': case 'U': case 'M': case 'R': case 'T':
+            return 1 + recCont(palavra, y+1);
+        case 'D': case 'L': case 'C': case 'P':
+            return 2 + recCont(palavra, y+1);
+
+      /*A cedilha minúscula "ç" tem o valor UTF-8 de 0xC3 0xA7 e a cedilha maiúscula "Ç" tem o valor UTF-8 de 0xC3 0x87.*/
+        case 'N': case 'B': case 0xC3:  
+            return 3 + recCont(palavra, y+1);
+        case 'F': case 'G': case 'H': case 'V':
+            return 4 + recCont(palavra, y+1);
+        case 'J':
+            return 5 + recCont(palavra, y+1);
+        case 'Q':
+            return 6 + recCont(palavra, y+1);
+        case 'X': case 'Z': case 'K': case 'Y': case 'W':
+            return 8 + recCont(palavra, y+1);
+       default:
+     
+      return recCont(palavra, y+1);
+    }
+  
+}
+
+int main(void){
+  int x, w;
+  unsigned char palavra[26];
+  
+
+  printf("Insira uma palavra de até 25 caracteres:\n");
+  scanf("%25s", palavra);
+
+  x = recCont(palavra, 0);
+  printf("Sua Pontuação: %d", x);
+
+  return 0;
+}
